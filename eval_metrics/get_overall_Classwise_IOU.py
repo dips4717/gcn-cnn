@@ -12,7 +12,7 @@ import time
 #%% IoU Classwise
 
 def get_overall_Classwise_IOU(boundingBoxes,sort_inds,g_fnames,q_fnames, topk = [1,5,10,20,40]):
-    data_dir = '/mnt/amber/scratch/Dipu/RICO/semantic_annotations/'
+    #data_dir = '/mnt/amber/scratch/Dipu/RICO/semantic_annotations/'
     n_topk = max(topk)
     n_query = len(q_fnames)
     
@@ -24,7 +24,9 @@ def get_overall_Classwise_IOU(boundingBoxes,sort_inds,g_fnames,q_fnames, topk = 
     for i in  range((sort_inds.shape[0])):   #Iterate over all the query images 
         ts = time.time()
         qImageName = q_fnames[i]
-        q_img  =  Image.open(data_dir+qImageName+'.png').convert('RGB')
+        #q_img  =  Image.open(data_dir+qImageName+'.png').convert('RGB')
+        #q_img_size = q_img.size 
+        q_img_size = (1440, 2560)
         qBBoxes = boundingBoxes.getBoundingBoxesByImageName(qImageName) 
         qClasses = list(set([d.classId for d in qBBoxes]))
         
@@ -37,8 +39,8 @@ def get_overall_Classwise_IOU(boundingBoxes,sort_inds,g_fnames,q_fnames, topk = 
             
             #Iterate over each element(boudingbox)
             for c in qClasses:                               # qbbs query bounding boxes
-                mask1 = np.zeros(q_img.size, dtype=np.uint8) 
-                mask2 = np.zeros(q_img.size).astype(np.uint8) 
+                mask1 = np.zeros(q_img_size, dtype=np.uint8) 
+                mask2 = np.zeros(q_img_size).astype(np.uint8) 
                 
                 c_qboxes = [b for b in qBBoxes if b.classId == c]
                 c_rboxes = [b for b in rBBoxes if b.classId == c]
