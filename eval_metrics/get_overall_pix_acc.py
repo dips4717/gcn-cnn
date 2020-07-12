@@ -17,7 +17,7 @@ from PIL import Image
 import time
 
 def get_overall_pix_acc(boundingBoxes,sort_inds,g_fnames,q_fnames, topk = [1,5,10,20,40]):
-    data_dir = '/mnt/amber/scratch/Dipu/RICO/semantic_annotations/'
+    #data_dir = '/mnt/amber/scratch/Dipu/RICO/semantic_annotations/'
     n_topk = max(topk)
     n_query = len(q_fnames)
     
@@ -29,7 +29,9 @@ def get_overall_pix_acc(boundingBoxes,sort_inds,g_fnames,q_fnames, topk = [1,5,1
     for i in range((sort_inds.shape[0])):   #Iterate over all the query images 
         ts = time.time()
         qImageName = q_fnames[i]
-        q_img  =  Image.open(data_dir+qImageName+'.png').convert('RGB')
+        #q_img  =  Image.open(data_dir+qImageName+'.png').convert('RGB')
+        #q_img_size = q_img.size 
+        q_img_size = (1440, 2560)
         qBBoxes = boundingBoxes.getBoundingBoxesByImageName(qImageName) 
         
         for j in range(n_topk):     # Iterate over top-5 retrieved images
@@ -51,8 +53,8 @@ def get_overall_pix_acc(boundingBoxes,sort_inds,g_fnames,q_fnames, topk = [1,5,1
     #            ax[0,0].imshow(q_img)        
     #            ax[1,0].imshow(r_img)
                 
-                mask1 = np.zeros(q_img.size, dtype=np.uint8) 
-                mask2 = np.zeros(q_img.size).astype(np.uint8) 
+                mask1 = np.zeros(q_img_size, dtype=np.uint8) 
+                mask2 = np.zeros(q_img_size).astype(np.uint8) 
                 
                 c_qboxes = [b for b in qBBoxes if b.classId == c]
                 c_rboxes = [b for b in rBBoxes if b.classId == c]
