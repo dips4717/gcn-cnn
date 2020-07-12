@@ -75,49 +75,27 @@ class RICO_ComponentDataset(Dataset):
         self.opt = opt
         self.batch_size = self.opt.batch_size
         #self.img_dir = '/mnt/scratch/Dipu/RICO/semantic_annotations/' 
-        self.img_dir = '/mnt/amber/scratch/Dipu/RICO/semantic_annotations/'
-        if not(self.opt.use_directed_graph)  and not(self.opt.containment_feat):
-            self.sg_geometry_dir = '/mnt/amber/scratch/Dipu/RICO/GraphEncoding_data/geometry-iouNA-distNA-undirected/'
-        elif not(self.opt.use_directed_graph)  and self.opt.containment_feat:
-            self.sg_geometry_dir = '/mnt/amber/scratch/Dipu/RICO/GraphEncoding_data/geometry-iouNA-distNA-undirected_containment/'
-        elif self.opt.use_directed_graph and not(self.opt.xy_modified_feat) and not(self.opt.containment_feat):
-            self.sg_geometry_dir = '/mnt/amber/scratch/Dipu/RICO/GraphEncoding_data/geometry-iouNA-distNA-directed/'
-        elif self.opt.use_directed_graph and self.opt.xy_modified_feat and not(self.opt.containment_feat):
-            self.sg_geometry_dir = '/mnt/amber/scratch/Dipu/RICO/GraphEncoding_data/geometry-iouNA-distNA-directed_xyScaledBywh/'
-        elif self.opt.use_directed_graph and not(self.opt.xy_modified_feat) and self.opt.containment_feat:
-            self.sg_geometry_dir = '/mnt/amber/scratch/Dipu/RICO/GraphEncoding_data/geometry-iouNA-distNA-directed_containment'
-        elif self.opt.use_directed_graph and self.opt.xy_modified_feat and self.opt.containment_feat:
-            self.sg_geometry_dir = '/mnt/amber/scratch/Dipu/RICO/GraphEncoding_data/geometry-iouNA-distNA-directed_xyScaledBywh_containment/'
+        #self.img_dir = '/mnt/amber/scratch/Dipu/RICO/semantic_annotations/'
         
-        if not(self.opt.use_directed_graph)  and self.opt.use_7D_feat:
-            self.sg_geometry_dir = '/mnt/amber/scratch/Dipu/RICO/GraphEncoding_data/geometry-ioudropped-distNA-undirected_7D/'
-        elif (self.opt.use_directed_graph)  and self.opt.use_7D_feat:
-            self.sg_geometry_dir = '/mnt/amber/scratch/Dipu/RICO/GraphEncoding_data/geometry-ioudropped-distNA-directed_7D/'
-            
-        
+        self.sg_geometry_dir = '/mnt/amber/scratch/Dipu/RICO/GraphEncoding_data/geometry-iouNA-distNA-directed/'                
         print('\nLoading geometric graphs and features from {}\n'.format(self.sg_geometry_dir))
         
         self.info = pickle.load(open('data/rico_box_info_list.pkl', 'rb'))
-        self.Channel_img_dir = '/mnt/amber/scratch/Dipu/RICO/25ChannelImages'
+        #self.Channel_img_dir = '/mnt/amber/scratch/Dipu/RICO/25ChannelImages'
         self.transform = transform
         self.loader = default_loader     
        
         self.com2index = get_com2index()
         self.geometry_relation = True
         
-        if self.opt.containment_feat:
-            self.geom_feat_size = 9 
-        else:
-            self.geom_feat_size = 8
-            
-        if self.opt.use_7D_feat:
-            self.geom_feat_size = 7
+        self.geom_feat_size = 8
+
         
         # Separate out indexes for the train and test 
-        UI_data = pickle.load(open("/mnt/amber/scratch/Dipu/RICO/UI_data.p", "rb"))
+        UI_data = pickle.load(open("data/UI_data.p", "rb"))
         train_uis = UI_data['train_uis']
         
-        UI_test_data = pickle.load(open("/mnt/amber/scratch/Dipu/RICO/UI_test_data.p", "rb"))
+        UI_test_data = pickle.load(open("data/UI_test_data.p", "rb"))
         query_uis = UI_test_data['query_uis']
         gallery_uis = UI_test_data['gallery_uis']
         
@@ -171,20 +149,22 @@ class RICO_ComponentDataset(Dataset):
         
         sg_data = self.get_graph_data(index)
                 
-        image_id = self.info[index]['id']
+#        image_id = self.info[index]['id']
         
-        if self.opt.use_25_images:
-            # c_img = self.get_classwise_channel_image(index) #transform/resize this later
-            channel25_path = os.path.join(self.Channel_img_dir, image_id + '.npy' )
-            img = np.load(channel25_path)    
-            img = torch.tensor(img.astype(np.float32))
-        else:
-            img_name = os.path.join(self.img_dir, str(image_id) +'.png' )
-            img = self.loader(img_name)
-            img = self.transform(img)
+#        if self.opt.use_25_images:
+#            channel25_path = os.path.join(self.Channel_img_dir, image_id + '.npy' )
+#            img = np.load(channel25_path)    
+#            img = torch.tensor(img.astype(np.float32))
+#        else:
+#            img_name = os.path.join(self.img_dir, str(image_id) +'.png' )
+#            img = self.loader(img_name)
+#            img = self.transform(img)
    
+#        return (sg_data, 
+#                img,
+#                index)   
+#        
         return (sg_data, 
-                img,
                 index)   
             
     def get_graph_data(self, index):
@@ -209,22 +189,22 @@ class RICO_ComponentDataset(Dataset):
         return sg_data
     
     
-    def get_classwise_channel_image(self,index):
-        # Not Used as it takes a while to compute --> slow dataloader#
-        num_class = 25  # Num of channels = num of classes
-        W, H = 1440, 2560
-        c_img = torch.zeros(num_class, H, W)  # C*H*W
-        temp_info = self.info[index]
-        class_id = temp_info['class_id']
-        n_comp = len(temp_info['class_id'])
-        
-        for i in range(n_comp):
-            x1, y1, w, h = temp_info['xywh'][i]
-            x2 = x1+w
-            y2 = y1+h
-            channel = class_id[i]-1
-            #c_img[channel, x1:x2+1, y1:y2+1] = 1
-            c_img[channel, y1:y2, x1:x2+1  ] =1
+#    def get_classwise_channel_image(self,index):
+#        # Not Used as it takes a while to compute --> slow dataloader#
+#        num_class = 25  # Num of channels = num of classes
+#        W, H = 1440, 2560
+#        c_img = torch.zeros(num_class, H, W)  # C*H*W
+#        temp_info = self.info[index]
+#        class_id = temp_info['class_id']
+#        n_comp = len(temp_info['class_id'])
+#        
+#        for i in range(n_comp):
+#            x1, y1, w, h = temp_info['xywh'][i]
+#            x2 = x1+w
+#            y2 = y1+h
+#            channel = class_id[i]-1
+#            #c_img[channel, x1:x2+1, y1:y2+1] = 1
+#            c_img[channel, y1:y2, x1:x2+1  ] =1
         
         #Test the if the saved and the c_img computed are equal
         #image_id = self.info[index]['id']
@@ -235,11 +215,11 @@ class RICO_ComponentDataset(Dataset):
         #loaded = torch.tensor(loaded).type(torch.float32)
         #print(torch.all(torch.eq(loaded, c_img)))
         
-        return c_img    
+#        return c_img    
 
     def get_box_feats(self,box):
         boxes = np.array(box)
-        W, H = 1440, 2560  # We know the height and weight for all semantic UIs are 2560 and 1400
+        W, H = 1440, 2560  # We know the height and widtth for all semantic UIs are 2560 and 1400
         
         x1, y1, w, h = np.hsplit(boxes,4)
         x2, y2 = x1+w, y1+h 
@@ -255,15 +235,15 @@ class RICO_ComponentDataset(Dataset):
 
 #        mask_batch = np.zeros([batch_size * seq_per_img, self.seq_length + 2], dtype = 'float32')
         infos = []
-        images = []
+#        images = []
         wrapped = False
         
 
         for i in range(batch_size):
             # fetch image
-            tmp_sg, tmp_img, ix, tmp_wrapped = self._prefetch_process[split].get()
+            tmp_sg, ix, tmp_wrapped = self._prefetch_process[split].get()
             sg_batch.append(tmp_sg)
-            images.append(tmp_img)     
+#            images.append(tmp_img)     
            
             # record associated info as well
             info_dict = {}
@@ -283,7 +263,7 @@ class RICO_ComponentDataset(Dataset):
         data['infos'] = infos
 
         data['sg_data'] = self.batch_sg(sg_batch, max_box_len)
-        data['images'] = torch.stack(images)
+#        data['images'] = torch.stack(images)
         
         return data
 
@@ -317,11 +297,6 @@ class RICO_ComponentDataset(Dataset):
             for i in range(len(box_feats_batch)):
                 sg_data['box_feats'][i, :len(box_feats_batch[i])] = box_feats_batch[i]   
             
-#        # attr labels, shape: (B, No, 3)
-#        sg_data['attr_labels'] = np.zeros([len(attr_batch), max_att_len, self.opt.num_attr_label_use], dtype = 'int')
-#        for i in range(len(attr_batch)):
-#            sg_data['attr_labels'][i, :attr_batch[i].shape[0]] = attr_batch[i]
-#        # obj and attr share the same mask as att_feats
 
         # rela
         max_rela_len = max([_['edges'].shape[0] for _ in rela_batch])
