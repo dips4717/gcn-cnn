@@ -14,8 +14,8 @@ from scipy.spatial.distance import cdist
 import numpy as np
 import init_paths
 
-from dataloader import *
-from dataloader import RICO_ComponentDataset
+from test_dataloader import *
+from test_dataloader import RICO_ComponentDataset
 #from model import GraphEncoderRasterDecoder
 #from models.model import GraphEncoderRasterDecoder
 import models
