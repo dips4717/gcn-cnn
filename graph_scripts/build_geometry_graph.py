@@ -27,7 +27,7 @@ def build_geometry_graph(id):
     edges = []
     relas = []
     
-    if id == '16343':
+    if id == '71073':
         print('breakpoint')
     
     for i in range(num_boxes):
