@@ -7,11 +7,6 @@ import os
 import pickle
 from multiprocessing import Pool, Value
 
-"""
-build geometry graph & obtain its edges and edge features
-assign an edge between two boxes if their iou and distance satisfy given threshold
-"""
-
 class Counter(object):
     def __init__(self):
         self.val = Value('i', 0)
@@ -51,7 +46,7 @@ def build_geometry_graph(id):
 
     # in case some trouble is met
     if edges == []:
-        print('id: ', id )
+#        print('id: ', id )
         f = open("../data/single_component_images_directed.txt", "a")
         f.write('%s\n'%(id))
 #        edges.append([0, 1])
@@ -72,10 +67,8 @@ def build_geometry_graph(id):
 
 
 Directed = True  # directed or undirected graph
-Iou = 'NA'
-Dist = 'NA'
-SaveDir = "/mnt/amber/scratch/Dipu/RICO/GraphEncoding_data/geometry-iou{}-dist{}-{}directed_7D".format('dropped', Dist, '' if Directed else 'un')
-GeometryFeatsPath = '/mnt/amber/scratch/Dipu/RICO/GraphEncoding_data/geometry_feats-{}directed_7D.pkl'.format('' if Directed else 'un')
+SaveDir = "../graph_data/geometry-{}directed".format('' if Directed else 'un')
+GeometryFeatsPath = '../graph_data/geometry_feats-{}directed.pkl'.format('' if Directed else 'un')
 
 if os.path.exists(SaveDir):
     raise Exception("dir already exists")
