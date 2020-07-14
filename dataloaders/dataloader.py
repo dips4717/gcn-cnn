@@ -65,13 +65,6 @@ class RICO_ComponentDataset(Dataset):
         self.iterators[split] = 0
    
     def __init__(self,opt, transform):
-        """
-        Args:
-            img_list (list): Path to the csv file with annotations.
-            root_dir (string): Directory with all the images.
-            transform (callable, optional): Optional transform to be applied on a sample.
-        """
-        
         self.opt = opt
         
         self.info = pickle.load(open('data/rico_box_info_list.pkl', 'rb'))
@@ -126,7 +119,6 @@ class RICO_ComponentDataset(Dataset):
         self.iterators = {'train': 0,  'query': 0,  'gallery': 0}
         
         for split in self.split_ix.keys():
-            #self.logger.info('assigned %d images to split %s' % (len(self.split_ix[split]), split)
             print('assigned %d images to split %s'%(len(self.split_ix[split]), split))
         
         self._prefetch_process = {} # The three prefetch process 
@@ -295,12 +287,7 @@ class RICO_ComponentDataset(Dataset):
             sg_data['box_feats'] = np.zeros([len(box_feats_batch), max_box_len, 5], dtype = 'float32')
             for i in range(len(box_feats_batch)):
                 sg_data['box_feats'][i, :len(box_feats_batch[i])] = box_feats_batch[i]   
-            
-#        # attr labels, shape: (B, No, 3)
-#        sg_data['attr_labels'] = np.zeros([len(attr_batch), max_att_len, self.opt.num_attr_label_use], dtype = 'int')
-#        for i in range(len(attr_batch)):
-#            sg_data['attr_labels'][i, :attr_batch[i].shape[0]] = attr_batch[i]
-#        # obj and attr share the same mask as att_feats
+
 
         # rela
         max_rela_len = max([_['edges'].shape[0] for _ in rela_batch])
