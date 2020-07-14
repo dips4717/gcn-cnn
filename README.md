@@ -8,13 +8,13 @@
 # Datasets
 ### RICO Datasets
 * Download RICO dataset from [rico](https://interactionmining.org/rico) (Optional)
-* We use semantic UI screenshots and annotations. Simplified annotation for semantic RICO UIs is given in *data/rico_box_info_list.pkl*
-* Dataset partition sets (train/gallery/query) used for all experiments are in `data/UI_data.p` and 'UI_test_data.p'
+* We use semantic UI screenshots and annotations. Simplified annotation for semantic RICO UIs is given in `data/rico_box_info_list.pkl`
+* Dataset partition sets (train/gallery/query) used for all experiments are in `data/UI_data.p` and `UI_test_data.p`
 * 
 
 ### GoogleUI Datasets
 * We release GoogleUI dataset. GoogleUI is a new dataset of 18.5K UX designs collected from web.
-* Dataset/annoations/descriptions can be downloaded from [Google Drive](https://drive.google.com/drive/folders/1LdhtDfiv48jSAbaLmL3rbrLBi4ZByd6p?usp=sharing)
+* Dataset/annoations/descriptions can be obtained from [Google Drive](https://drive.google.com/drive/folders/1LdhtDfiv48jSAbaLmL3rbrLBi4ZByd6p?usp=sharing)
 
 
 
@@ -24,7 +24,7 @@ To evaluate the model:
 	* Run ` python graph_scripts/cal_geometry_feat.py`. This will compute the geometric features for all rico UIs
 	* Run `python graph_scripts/build_geomerty_graph.py`. This will pre-construct the graph data for UIs; saved under *graph_data/*
 
-* Run `evaluate.py` to get the performance metrics: top-k mIoU and mPixAcc
+* Run `python evaluate.py` to get the performance metrics: top-k mIoU and mPixAcc
 
 
 # Training
@@ -33,7 +33,8 @@ To evaluate the model:
 python train.py --batch_size 10 --decoder_model 'strided' --dim 1024 \
 --use_directed_graph True 
 ```	
-	* It is recommended to pre-compute the 25-Channel representations for all RICO UIsfor faster dataloading and training.
+
+	* For faster dataloading and training, it is recommended to pre-compute the 25-Channel representations for all RICO UIs
 	* To do so: run `python compute_25Chan_Imgs.py` 
 	* This will save all 25 Channel represenations for all UIs into data/25ChanImages
 

@@ -15,8 +15,8 @@ from scipy.spatial.distance import cdist
 import numpy as np
 import init_paths
 
-from test_dataloader import *
-from test_dataloader import RICO_ComponentDataset
+from dataloaders.dataloader_test import *
+from dataloaders.dataloader_test import RICO_ComponentDataset
 
 import models
 import opts_dml
@@ -41,10 +41,10 @@ def main():
     
 
     boundingBoxes = getBoundingBoxes_from_info()
-    model_file = 'trained_model/model_decSTR_dim1024_TRI_ep25.pth'
+    model_file = 'trained_model/model_dec_strided_dim1024_TRI_ep25.pth'
    
       
-    data_transform = transforms.Compose([
+    data_transform = transforms.Compose([  # Not used for 25Channel_images
             transforms.Resize([255,127]),
             transforms.ToTensor(),
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])

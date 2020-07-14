@@ -6,9 +6,10 @@ __pycache__/
 # C extensions
 *.so
 
-#Graph data
+#Diretories
 graph_data
 data/25ChanImages
+trained_model
 
 #Pickle
 #*.pkl
