@@ -3,7 +3,7 @@
 """
 Created on Mon Oct 28 16:05:38 2019
     - Dataloader for triplet of graph-data.
-    - trainset only includes ids that has valid positive-pairs (iou > threshold.) e.g. 0.7
+    - trainset only includes ids that has valid positive-pairs (iou > threshold.) e.g. 0.6
     - randomly sample anchors [same as previous]
     - for selected anchor, find an positive from positive set (randomly choose if multiple exits)
     - To find the negative,
@@ -102,9 +102,8 @@ class RICO_TripletDataset(Dataset):
         self.geometry_relation = True
         self.geom_feat_size = 8
         
-        #%% get the anchor-positive-negative apn_dict dictionary 
-        #self.apn_dict = pickle_load('Triplet_exps/apn_dict_pthres60.pkl')
-        self.apn_dict = pickle_load('Triplet_exps/apn_dict_48K_pthres60.pkl')
+        #% get the anchor-positive-negative apn_dict dictionary 
+        self.apn_dict = pickle_load(self.opt.apn_dict_path)
         #%%
         train_uis = list(self.apn_dict.keys())
         
@@ -268,10 +267,12 @@ class RICO_TripletDataset(Dataset):
             sg_data = {'obj': obj,  'rela': rela, 'box':box}
             
         if self.opt.use_25_images:
-            # c_img = self.get_classwise_channel_image(index) #transform/resize this later
-            channel25_path = os.path.join(self.Channel_img_dir, image_id + '.npy' )
-            img = np.load(channel25_path)    
-            img = torch.tensor(img.astype(np.float32))
+            if self.opt.use_precomputed_25Chan_imgs:
+                channel25_path = os.path.join(self.Channel_img_dir, image_id + '.npy' )
+                img = np.load(channel25_path)    
+                img = torch.tensor(img.astype(np.float32))
+            else:
+                img = self.get_classwise_channel_image(index) #transform/resize this later
         else:
             img_name = os.path.join(self.img_dir, str(image_id) +'.png' )
             img = self.loader(img_name)
