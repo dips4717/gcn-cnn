@@ -1,0 +1,3 @@
+Epoch [01] [04000 / 65538  ] Average_Loss: 0.03144
+Completed 4000 images in 74.55130648612976Epoch [01] [08000 / 65538  ] Average_Loss: 0.02903
+Completed 8000 images in 69.46264624595642

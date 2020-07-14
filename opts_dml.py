@@ -29,6 +29,12 @@ def parse_opt():
     parser.add_argument('--lambda_mul', type=float, default=10.0, # .0, #5.,
                     help='margin parameter of triplet loss')
     
+    # Directories
+    parser.add_argument('--img_dir', type=str, default='/mnt/amber/scratch/Dipu/RICO/semantic_annotations/',  
+                    help='path to the semantic UI images of RICO dataset')
+    parser.add_argument('--Channel25_img_dir', type=str, default='/mnt/amber/scratch/Dipu/RICO/25ChannelImages',  
+                    help='path to the precomputed 25 Channel image representation of RICO UIs')
+    
     
     # Model parameters 
     parser.add_argument('--decoder_model', type=str, default = 'strided',  # 'strided',#'upsample',  #
@@ -45,12 +51,14 @@ def parse_opt():
     # Dataloader parameters
     parser.add_argument('--use_directed_graph', type=str2bool, default = True,
                         help='undirected or directed graph')
+    parser.add_argument('--use_precomputed_25Chan_imgs', type=str2bool, default =False,  
+                        help ='whether to pre-computed 25 Channel Images for faster dataloading/training') 
+    parser.add_argument('--use_25_images', type=str2bool, default =True,  
+                        help ='whether to use 3-channel Semanti UI or 25 Channel images for loss') 
     parser.add_argument('--xy_modified_feat', type=str2bool, default = False,
                         help='xy shifts normalized by width  & height or by the area')
     parser.add_argument('--containment_feat', type=str2bool, default = False,
                         help='undirected or directed graph')
-    parser.add_argument('--use_25_images', type=str2bool, default =True,  
-                        help ='whether to use 3-channel Semanti UI or 25 Channel images for loss') 
     parser.add_argument('--use_box_feats', type=str2bool, default = True, 
                         help='whether to use geometric box features')
     parser.add_argument('--use_7D_feat', type=str2bool, default = False, 

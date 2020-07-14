@@ -74,9 +74,6 @@ class RICO_ComponentDataset(Dataset):
         
         self.opt = opt
         self.batch_size = self.opt.batch_size
-        #self.img_dir = '/mnt/scratch/Dipu/RICO/semantic_annotations/' 
-        #self.img_dir = '/mnt/amber/scratch/Dipu/RICO/semantic_annotations/'
-        
         self.sg_geometry_dir = 'graph_data/geometry-directed/'                
         print('\nLoading geometric graphs and features from {}\n'.format(self.sg_geometry_dir))
         

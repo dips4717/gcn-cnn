@@ -73,51 +73,28 @@ class RICO_ComponentDataset(Dataset):
         """
         
         self.opt = opt
-        self.batch_size = self.opt.batch_size
-        #self.img_dir = '/mnt/scratch/Dipu/RICO/semantic_annotations/' 
-        self.img_dir = '/mnt/amber/scratch/Dipu/RICO/semantic_annotations/'
-        if not(self.opt.use_directed_graph)  and not(self.opt.containment_feat):
-            self.sg_geometry_dir = '/mnt/amber/scratch/Dipu/RICO/GraphEncoding_data/geometry-iouNA-distNA-undirected/'
-        elif not(self.opt.use_directed_graph)  and self.opt.containment_feat:
-            self.sg_geometry_dir = '/mnt/amber/scratch/Dipu/RICO/GraphEncoding_data/geometry-iouNA-distNA-undirected_containment/'
-        elif self.opt.use_directed_graph and not(self.opt.xy_modified_feat) and not(self.opt.containment_feat):
-            self.sg_geometry_dir = '/mnt/amber/scratch/Dipu/RICO/GraphEncoding_data/geometry-iouNA-distNA-directed/'
-        elif self.opt.use_directed_graph and self.opt.xy_modified_feat and not(self.opt.containment_feat):
-            self.sg_geometry_dir = '/mnt/amber/scratch/Dipu/RICO/GraphEncoding_data/geometry-iouNA-distNA-directed_xyScaledBywh/'
-        elif self.opt.use_directed_graph and not(self.opt.xy_modified_feat) and self.opt.containment_feat:
-            self.sg_geometry_dir = '/mnt/amber/scratch/Dipu/RICO/GraphEncoding_data/geometry-iouNA-distNA-directed_containment'
-        elif self.opt.use_directed_graph and self.opt.xy_modified_feat and self.opt.containment_feat:
-            self.sg_geometry_dir = '/mnt/amber/scratch/Dipu/RICO/GraphEncoding_data/geometry-iouNA-distNA-directed_xyScaledBywh_containment/'
-        
-        if not(self.opt.use_directed_graph)  and self.opt.use_7D_feat:
-            self.sg_geometry_dir = '/mnt/amber/scratch/Dipu/RICO/GraphEncoding_data/geometry-ioudropped-distNA-undirected_7D/'
-        elif (self.opt.use_directed_graph)  and self.opt.use_7D_feat:
-            self.sg_geometry_dir = '/mnt/amber/scratch/Dipu/RICO/GraphEncoding_data/geometry-ioudropped-distNA-directed_7D/'
-            
-        
-        print('\nLoading geometric graphs and features from {}\n'.format(self.sg_geometry_dir))
         
         self.info = pickle.load(open('data/rico_box_info_list.pkl', 'rb'))
-        self.Channel_img_dir = '/mnt/amber/scratch/Dipu/RICO/25ChannelImages'
+        self.Channel_img_dir = self.opt.Channel25_img_dir
+        self.img_dir = self.opt.img_dir
+
+        self.sg_geometry_dir = 'graph_data/geometry-directed/'                
+        print('\nLoading geometric graphs and features from {}\n'.format(self.sg_geometry_dir))
+        
+        self.batch_size = self.opt.batch_size
         self.transform = transform
         self.loader = default_loader     
        
         self.com2index = get_com2index()
         self.geometry_relation = True
-        
-        if self.opt.containment_feat:
-            self.geom_feat_size = 9 
-        else:
-            self.geom_feat_size = 8
-            
-        if self.opt.use_7D_feat:
-            self.geom_feat_size = 7
+        self.geom_feat_size = 8
+
         
         # Separate out indexes for the train and test 
-        UI_data = pickle.load(open("/mnt/amber/scratch/Dipu/RICO/UI_data.p", "rb"))
+        UI_data = pickle.load(open("data/UI_data.p", "rb"))
         train_uis = UI_data['train_uis']
         
-        UI_test_data = pickle.load(open("/mnt/amber/scratch/Dipu/RICO/UI_test_data.p", "rb"))
+        UI_test_data = pickle.load(open("data/UI_test_data.p", "rb"))
         query_uis = UI_test_data['query_uis']
         gallery_uis = UI_test_data['gallery_uis']
         
@@ -174,10 +151,12 @@ class RICO_ComponentDataset(Dataset):
         image_id = self.info[index]['id']
         
         if self.opt.use_25_images:
-            # c_img = self.get_classwise_channel_image(index) #transform/resize this later
-            channel25_path = os.path.join(self.Channel_img_dir, image_id + '.npy' )
-            img = np.load(channel25_path)    
-            img = torch.tensor(img.astype(np.float32))
+            if self.opt.use_precomputed_25Chan_imgs:
+                channel25_path = os.path.join(self.Channel_img_dir, image_id + '.npy' )
+                img = np.load(channel25_path)    
+                img = torch.tensor(img.astype(np.float32))
+            else:
+                img = self.get_classwise_channel_image(index) #transform/resize this later
         else:
             img_name = os.path.join(self.img_dir, str(image_id) +'.png' )
             img = self.loader(img_name)

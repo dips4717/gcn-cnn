@@ -8,6 +8,7 @@ __pycache__/
 
 #Graph data
 graph_data
+data/25ChanImages
 
 #Pickle
 #*.pkl
