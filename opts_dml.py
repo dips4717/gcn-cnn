@@ -37,7 +37,7 @@ def parse_opt():
     
     
     # Model parameters 
-    parser.add_argument('--decoder_model', type=str, default = 'upsample',  # 'strided',#'upsample',  #
+    parser.add_argument('--decoder_model', type=str, default = 'strided',  # 'strided',#'upsample',  #
                         help='which decoder upsample or strided')
     parser.add_argument('--last_layer_sigmoid', type=str2bool, default = False, 
                         help='whether to sigmoid activation after last layer')
@@ -51,10 +51,12 @@ def parse_opt():
     # Dataloader parameters
     parser.add_argument('--use_directed_graph', type=str2bool, default = True,
                         help='undirected or directed graph')
-    parser.add_argument('--use_precomputed_25Chan_imgs', type=str2bool, default =False,  
+    parser.add_argument('--use_precomputed_25Chan_imgs', type=str2bool, default =True,  
                         help ='whether to pre-computed 25 Channel Images for faster dataloading/training') 
     parser.add_argument('--use_25_images', type=str2bool, default =True,  
-                        help ='whether to use 3-channel Semanti UI or 25 Channel images for loss') 
+                        help ='whether to use 3-channel Semanti UI or 25 Channel images for loss')
+    parser.add_argument('--apn_dict_path', type=str, default ='/home/dipu/codes/GraphEncoding-RICO/Triplet_exps/apn_dict_48K_pthres60.pkl', 
+                        help='path to the training triplets computed based on IoU')
     parser.add_argument('--xy_modified_feat', type=str2bool, default = False,
                         help='xy shifts normalized by width  & height or by the area')
     parser.add_argument('--containment_feat', type=str2bool, default = False,
