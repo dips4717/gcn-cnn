@@ -86,43 +86,21 @@ class RICO_TripletDataset(Dataset):
    
     def __init__(self,opt, transform):
         self.opt = opt
-        self.batch_size = self.opt.batch_size
-        #self.img_dir = '/mnt/scratch/Dipu/RICO/semantic_annotations/' 
-        self.img_dir = '/mnt/amber/scratch/Dipu/RICO/semantic_annotations/'
-        if not(self.opt.use_directed_graph) :
-            self.sg_geometry_dir = '/mnt/amber/scratch/Dipu/RICO/GraphEncoding_data/geometry-iouNA-distNA-undirected/'
-        elif self.opt.use_directed_graph and not(self.opt.xy_modified_feat) and not(self.opt.containment_feat):
-            self.sg_geometry_dir = '/mnt/amber/scratch/Dipu/RICO/GraphEncoding_data/geometry-iouNA-distNA-directed/'
-        elif self.opt.use_directed_graph and self.opt.xy_modified_feat and not(self.opt.containment_feat):
-            self.sg_geometry_dir = '/mnt/amber/scratch/Dipu/RICO/GraphEncoding_data/geometry-iouNA-distNA-directed_xyScaledBywh/'
-        elif self.opt.use_directed_graph and not(self.opt.xy_modified_feat) and self.opt.containment_feat:
-            self.sg_geometry_dir = '/mnt/amber/scratch/Dipu/RICO/GraphEncoding_data/geometry-iouNA-distNA-directed_containment'
-        elif self.opt.use_directed_graph and self.opt.xy_modified_feat and self.opt.containment_feat:
-            self.sg_geometry_dir = '/mnt/amber/scratch/Dipu/RICO/GraphEncoding_data/geometry-iouNA-distNA-directed_xyScaledBywh_containment/'
-        
-        if not(self.opt.use_directed_graph)  and self.opt.use_7D_feat:
-            self.sg_geometry_dir = '/mnt/amber/scratch/Dipu/RICO/GraphEncoding_data/geometry-ioudropped-distNA-undirected_7D/'
-        elif (self.opt.use_directed_graph)  and self.opt.use_7D_feat:
-            self.sg_geometry_dir = '/mnt/amber/scratch/Dipu/RICO/GraphEncoding_data/geometry-ioudropped-distNA-directed_7D/'
-         
-        
-        print('\nLoading geometric graphs and features from {}\n'.format(self.sg_geometry_dir))
         
         self.info = pickle.load(open('data/rico_box_info_list.pkl', 'rb'))
-        self.Channel_img_dir = '/mnt/amber/scratch/Dipu/RICO/25ChannelImages'
+        self.img_dir = self.opt.img_dir
+        self.Channel_img_dir = self.opt.Channel25_img_dir
+
+        self.sg_geometry_dir = 'graph_data/geometry-directed/'                
+        print('\nLoading geometric graphs and features from {}\n'.format(self.sg_geometry_dir))
+        
+        self.batch_size = self.opt.batch_size
         self.transform = transform
         self.loader = default_loader     
        
         self.com2index = get_com2index()
         self.geometry_relation = True
-        
-        if self.opt.containment_feat:
-            self.geom_feat_size = 9 
-        else:
-            self.geom_feat_size = 8
-            
-        if self.opt.use_7D_feat:
-            self.geom_feat_size = 7    
+        self.geom_feat_size = 8
         
         #%% get the anchor-positive-negative apn_dict dictionary 
         #self.apn_dict = pickle_load('Triplet_exps/apn_dict_pthres60.pkl')
@@ -131,10 +109,10 @@ class RICO_TripletDataset(Dataset):
         train_uis = list(self.apn_dict.keys())
         
         # Separate out indexes for the train and test 
-        UI_data = pickle.load(open("/mnt/amber/scratch/Dipu/RICO/UI_data.p", "rb"))
+        UI_data = pickle.load(open("data/UI_data.p", "rb"))
         orig_train_uis = UI_data['train_uis']
         
-        UI_test_data = pickle.load(open("/mnt/amber/scratch/Dipu/RICO/UI_test_data.p", "rb"))
+        UI_test_data = pickle.load(open("data/UI_test_data.p", "rb"))
         query_uis = UI_test_data['query_uis']
         gallery_uis = UI_test_data['gallery_uis']
         
@@ -172,7 +150,6 @@ class RICO_TripletDataset(Dataset):
         self.iterators = {'train': 0,  'query': 0,  'gallery': 0}
         
         for split in self.split_ix.keys():
-            #self.logger.info('assigned %d images to split %s' % (len(self.split_ix[split]), split)
             print('assigned %d images to split %s'%(len(self.split_ix[split]), split))
         
         self._prefetch_process = {} # The three prefetch process 
@@ -447,12 +424,6 @@ class RICO_TripletDataset(Dataset):
             for i in range(len(box_feats_batch)):
                 sg_data['box_feats'][i, :len(box_feats_batch[i])] = box_feats_batch[i]   
             
-#        # attr labels, shape: (B, No, 3)
-#        sg_data['attr_labels'] = np.zeros([len(attr_batch), max_att_len, self.opt.num_attr_label_use], dtype = 'int')
-#        for i in range(len(attr_batch)):
-#            sg_data['attr_labels'][i, :attr_batch[i].shape[0]] = attr_batch[i]
-#        # obj and attr share the same mask as att_feats
-
         # rela
         max_rela_len = max([_['edges'].shape[0] for _ in rela_batch])
         sg_data['rela_edges'] = np.zeros([len(rela_batch), max_rela_len, 2], dtype = 'int')
