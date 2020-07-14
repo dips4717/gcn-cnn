@@ -39,7 +39,8 @@ python train.py --batch_size 10 --decoder_model 'strided' --dim 1024 \
 	* This will save all 25 Channel represenations for all UIs into data/25ChanImages
 
 * To train GCN-CNN model using pre-computed 25-Channel representations
- ```
+ 
+```
 python train.py --batch_size 10 --decoder_model 'strided' --dim 1024 \
 --use_directed_graph True \
 --use_precomputed_25Chan_imgs True\

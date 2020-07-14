@@ -56,11 +56,11 @@ class AverageMeter(object):
         self.count += n
         self.avg = self.sum / self.count 
 
-def save_checkpoint(state, is_best, fpath='checkpoint.pth.tar'):
+def save_checkpoint(state, is_best, fpath='checkpoint.pth'):
     mkdir_if_missing(osp.dirname(fpath))
     torch.save(state, fpath)
     if is_best:
-        shutil.copy(fpath, osp.join(osp.dirname(fpath), 'model_best.pth.tar'))
+        shutil.copy(fpath, osp.join(osp.dirname(fpath), 'model_best.pth'))
 
 def load_checkpoint(fpath):
     if osp.isfile(fpath):
@@ -102,7 +102,7 @@ def main(opt):
     
     save_dir = 'trained_model/model_dec_{}_dim{}'.format(opt.decoder_model, opt.dim)
     mkdir_if_missing(save_dir)
-    print ('saving dir: ', save_dir)
+    print ('Output dir: ', save_dir)
     
     loader = RICO_ComponentDataset(opt, data_transform) 
     model = models.create(opt.decoder_model, opt)
@@ -263,9 +263,7 @@ def perform_tests(model, loader, boundingBoxes,  save_dir, ep):
     print('GAlleryOnly Flag:', onlyGallery)
     
     print('overallMeanClassIou =  ' + str([ '{:.3f}'.format(x) for x in overallMeanClassIou]) + '\n')        
-    print('overallMeanWeightedClassIou =  ' + str([ '{:.3f}'.format(x) for x in overallMeanWeightedClassIou]) + '\n')
     print('overallMeanAvgPixAcc =  ' + str([ '{:.3f}'.format(x) for x in overallMeanAvgPixAcc]) + '\n')
-    print('overallMeanWeightedPixAcc =  ' + str([ '{:.3f}'.format(x) for x in overallMeanWeightedPixAcc]) + '\n')
     
            
     with open(save_file, 'a') as f:
@@ -274,9 +272,7 @@ def perform_tests(model, loader, boundingBoxes,  save_dir, ep):
         f.write('GAlleryOnly Flag: {}\n'.format(onlyGallery))     
        
         f.write('overallMeanClassIou =  ' + str([ '{:.3f}'.format(x) for x in overallMeanClassIou]) + '\n')
-        f.write('overallMeanWeightedClassIou =  ' + str([ '{:.3f}'.format(x) for x in overallMeanWeightedClassIou]) + '\n')
         f.write('overallMeanAvgPixAcc =  ' + str([ '{:.3f}'.format(x) for x in overallMeanAvgPixAcc]) + '\n')
-        f.write('overallMeanWeightedPixAcc =  ' + str([ '{:.3f}'.format(x) for x in overallMeanWeightedPixAcc]) + '\n')
         
 opt = opts_dml.parse_opt()
 for arg in vars(opt):
