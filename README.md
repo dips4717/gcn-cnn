@@ -13,6 +13,8 @@
 * 
 
 ### GoogleUI Datasets
+* We release GoogleUI dataset. GoogleUI is a new dataset of 18.5K UX designs obtained from the web.
+* Dataset and annoations can be downloaded from (Google Drive)[https://drive.google.com/drive/folders/1LdhtDfiv48jSAbaLmL3rbrLBi4ZByd6p?usp=sharing]
 
 
 
