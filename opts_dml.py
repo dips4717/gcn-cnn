@@ -37,7 +37,7 @@ def parse_opt():
     
     
     # Model parameters 
-    parser.add_argument('--decoder_model', type=str, default = 'strided',  # 'strided',#'upsample',  #
+    parser.add_argument('--decoder_model', type=str, default = 'upsample',  # 'strided',#'upsample',  #
                         help='which decoder upsample or strided')
     parser.add_argument('--last_layer_sigmoid', type=str2bool, default = False, 
                         help='whether to sigmoid activation after last layer')

@@ -93,8 +93,8 @@ def clip_gradient(optimizer, grad_clip):
 #%%
 def main(opt):
     print(opt)
-    data_transform = transforms.Compose([
-            transforms.Resize([254,126]),  # transforms.Resize([254,126])
+    data_transform = transforms.Compose([ # Only used if decoder is trained using 3-Channel RBG (not 25Channel Images)
+            transforms.Resize([254,126]),  
             transforms.ToTensor(),
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ])
@@ -110,7 +110,7 @@ def main(opt):
    
     print(model)
     
-    if opt.loss =='mse':
+    if opt.loss =='mse':   # MSE Loss works the best
         criterion = nn.MSELoss()
     elif opt.loss == 'bce':
         criterion = nn.BCEWithLogitsLoss(pos_weight = torch.tensor([30.0]).cuda())
@@ -149,9 +149,12 @@ def main(opt):
 #        torch.cuda.synchronize()   # Waits for all kernels in all streams on a CUDA device to complete. 
         optimizer.zero_grad()
         _, out = model(sg_data)
-        if opt.decoder_model == 'strided' or opt.decoder_model == 'strided_dim2688':
+        print ('out size :', out.size() )
+        print('images size: ', images.size())
+        if opt.decoder_model == 'strided': 
             images = F.interpolate(images, size= [239,111])
-            
+        elif opt.decoder_model == 'upsample':
+            images = F.interpolate(images, size= [254,126])            
         loss = criterion(out, images) 
         
         # 3. Update model

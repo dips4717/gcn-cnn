@@ -225,9 +225,7 @@ class GraphEncoder_25ChanStridedDecoder(nn.Module):
         else:
             raise Exception('readout method no implemented')
 #       =================================================================  
-        
-        
-        
+       
         # Encoded vector
         enc_vec = self.read_out(torch.cat([obj_att_vec, rela_att_vec],1))
         
