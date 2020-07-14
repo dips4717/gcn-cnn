@@ -133,7 +133,7 @@ class GraphEncoder_25ChanUpSampleDecoder(nn.Module):
         
         self.decoder_FC = nn.Linear(self.dim, 32*14*6)
         
-        self.decoder_raster = nn.Sequential(
+        self.decoder = nn.Sequential(
             nn.Upsample(scale_factor =2, mode = 'nearest'),
             nn.ConvTranspose2d(32,25,3),
             nn.ReLU(),
