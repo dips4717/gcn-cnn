@@ -41,7 +41,8 @@ def main():
     
 
     boundingBoxes = getBoundingBoxes_from_info()
-    model_file = 'trained_model/model_dec_strided_dim1024_TRI_ep25.pth'
+    #model_file = 'trained_model/model_dec_strided_dim1024_TRI_ep25.pth'
+    model_file = 'trained_model/model_dec_strided_dim1024_ep35.pth'
    
       
     data_transform = transforms.Compose([  # Not used for 25Channel_images
