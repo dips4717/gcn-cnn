@@ -20,11 +20,11 @@
 
 ## Evaluation and trained model
 To evaluate the model:
+* `mkdir trained_models`
+* Download  trained models from [here](https://drive.google.com/drive/folders/1aBBUF76I9zXr50Yet3csY1Dhw7--ykti?usp=sharing) into `trained_models/`
 * Prior to evaluation/training, prepare graph represenatations for UIs following steps below:
 	* Run `python graph_scripts/cal_geometry_feat.py`. This will compute the geometric features for all rico UIs
-	* Run `python graph_scripts/build_geomerty_graph.py`. This will pre-construct the graph data for UIs; saved under *graph_data/*
-
-* Download the trained models from [models](https://drive.google.com/drive/folders/1aBBUF76I9zXr50Yet3csY1Dhw7--ykti?usp=sharing)
+	* Run `python graph_scripts/build_geomerty_graph.py`. This will pre-construct the graph data for UIs; saved under `graph_data/`
 * Run `python evaluate.py` to get the performance metrics: top-k mIoU and mPixAcc
 
 
@@ -47,12 +47,12 @@ python train.py --batch_size 10 --decoder_model 'strided' --dim 1024 \
 --use_precomputed_25Chan_imgs True\
 --Channel25_img_dir 'data\25ChanImages'
 ```		
-The model is saved into outpur_dir. It performs retrieval evaluation every N epoch and logs results into `output_dir\result.txt`
+The model is saved into outpur_dir. It performs retrieval evaluation every *N* epoch and logs results into `output_dir\results.txt`
 
 ## Fine-tune/train with triplet supervision (GCN-CNN-TRI)
-* To train GCN-CNN-TRI model, we need to generate triplets  for training which we provide (here)[]. Download it under `Triplets/`
+* To train GCN-CNN-TRI model, we need to generate triplets  for training which we provide [here](https://drive.google.com/drive/folders/1Qp94A2NQLdBcgaIEuJDJIffk5NHxIVxH?usp=sharing). Download it under `Triplets/`
 * If you want to generate your own triplets, See [Triplets](Triplets/)
-* Download the pretrained GCN_CNN model to fine-tune from [here](https://drive.google.com/drive/folders/1aBBUF76I9zXr50Yet3csY1Dhw7--ykti?usp=sharing)
+* Download the pretrained GCN_CNN model to fine-tune from [here](https://drive.google.com/drive/folders/1aBBUF76I9zXr50Yet3csY1Dhw7--ykti?usp=sharing) into `trained_models/`.
 
 ```
 python train_TRI.py --batch_size 10 --decoder_model 'strided' --dim 1024 \
