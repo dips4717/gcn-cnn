@@ -1,4 +1,4 @@
-# Learning UI Similarity using Graph Networks
+# Learning Structural Similarity of User Interface Layouts using Graph Networks
 
 <div align="center">
   <img src="data/gcncnn_arch.png"/>
@@ -10,20 +10,21 @@
 * Download RICO dataset from [rico](https://interactionmining.org/rico) (Optional)
 * We use semantic UI screenshots and annotations. Simplified annotation for semantic RICO UIs is given in `data/rico_box_info_list.pkl`
 * Dataset partition sets (train/gallery/query) used for all experiments are in `data/UI_data.p` and `UI_test_data.p`
-* 
+ 
 
 ### GoogleUI Datasets
 * We release GoogleUI dataset. GoogleUI is a new dataset of 18.5K UX designs collected from web.
-* Dataset/annoations/descriptions can be obtained from [Google Drive](https://drive.google.com/drive/folders/1LdhtDfiv48jSAbaLmL3rbrLBi4ZByd6p?usp=sharing)
+* Dataset/annotations/descriptions can be obtained from [Google Drive] (https://drive.google.com/drive/folders/1LdhtDfiv48jSAbaLmL3rbrLBi4ZByd6p?usp=sharing)
 
 
 
-## Evaluation code and model
+## Evaluation and trained model
 To evaluate the model:
 * Prior to evaluation/training, prepare graph represenatations for UIs following steps below:
-	* Run ` python graph_scripts/cal_geometry_feat.py`. This will compute the geometric features for all rico UIs
+	* Run `python graph_scripts/cal_geometry_feat.py`. This will compute the geometric features for all rico UIs
 	* Run `python graph_scripts/build_geomerty_graph.py`. This will pre-construct the graph data for UIs; saved under *graph_data/*
 
+* Download the trained models from [models](https://drive.google.com/drive/folders/1aBBUF76I9zXr50Yet3csY1Dhw7--ykti?usp=sharing)
 * Run `python evaluate.py` to get the performance metrics: top-k mIoU and mPixAcc
 
 
@@ -50,8 +51,8 @@ The model is saved into outpur_dir. It performs retrieval evaluation every N epo
 
 ## Fine-tune/train with triplet supervision (GCN-CNN-TRI)
 * To train GCN-CNN-TRI model, we need to generate triplets  for training which we provide (here)[]. Download it under `Triplets/`
-* If you want to generate your own triplets, See [Triplets](Triplets/])
-* Download the pretrained GCN_CNN model to fine-tune from [here]()
+* If you want to generate your own triplets, See [Triplets](Triplets/)
+* Download the pretrained GCN_CNN model to fine-tune from [here](https://drive.google.com/drive/folders/1aBBUF76I9zXr50Yet3csY1Dhw7--ykti?usp=sharing)
 
 ```
 python train_TRI.py --batch_size 10 --decoder_model 'strided' --dim 1024 \
