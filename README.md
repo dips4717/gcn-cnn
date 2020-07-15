@@ -5,7 +5,7 @@
 </div>
 
 
-# Datasets
+## Datasets
 ### RICO Datasets
 * Download RICO dataset from [rico](https://interactionmining.org/rico) (Optional)
 * We use semantic UI screenshots and annotations. Simplified annotation for semantic RICO UIs is given in `data/rico_box_info_list.pkl`
@@ -18,7 +18,7 @@
 
 
 
-# Evaluation code and model
+## Evaluation code and model
 To evaluate the model:
 * Prior to evaluation/training, prepare graph represenatations for UIs following steps below:
 	* Run ` python graph_scripts/cal_geometry_feat.py`. This will compute the geometric features for all rico UIs
@@ -27,7 +27,7 @@ To evaluate the model:
 * Run `python evaluate.py` to get the performance metrics: top-k mIoU and mPixAcc
 
 
-# Training
+## Training GCN-CNN
 * To train GCN-CNN model
 ```
 python train.py --batch_size 10 --decoder_model 'strided' --dim 1024 \
@@ -44,6 +44,36 @@ python train.py --batch_size 10 --decoder_model 'strided' --dim 1024 \
 python train.py --batch_size 10 --decoder_model 'strided' --dim 1024 \
 --use_directed_graph True \
 --use_precomputed_25Chan_imgs True\
---Channel25_img_dir 'data\25ChanImages
+--Channel25_img_dir 'data\25ChanImages'
 ```		
+The model is saved into outpur_dir. It performs retrieval evaluation every N epoch and logs results into `output_dir\result.txt`
+
+## Fine-tune/train with triplet supervision (GCN-CNN-TRI)
+* To train GCN-CNN-TRI model, we need to generate triplets  for training which we provide (here)[]. Download it under `Triplets/`
+* If you want to generate your own triplets, See [Triplets](Triplets/])
+* Download the pretrained GCN_CNN model to fine-tune from [here]()
+
+```
+python train_TRI.py --batch_size 10 --decoder_model 'strided' --dim 1024 \
+--use_directed_graph True \
+--use_precomputed_25Chan_imgs True\
+--Channel25_img_dir 'data\25ChanImages' \
+--apn_dict_path 'Triplets/apn_dict_48K_pthres60.pkl'
+```
+
+* The model is saved into outpur_dir. It performs retrieval evaluation every N epoch and logs results into `output_dir\result.txt`
+
+
+
+##Reference
+```
+@inproceedings{gcncnn_eccv2020,
+ title={Learning Structural Similarity of User Interface Layouts using Graph Networks},
+ author={Dipu Manandhar, Dan Ruta, and John Collomosse},
+ booktitle={ECCV},
+ year={2020}}
+```
+
+##Acknowlegdement
+This repo re-uses part of the code from [ltguo19/VSUA-Captioning](https://github.com/ltguo19/VSUA-Captioning).
 	

@@ -5,7 +5,6 @@ Created on Mon Feb 17 11:27:35 2020
 Compute an average iou between two images.
 For each image in train_set, the pairwise iou for rest of images in dataset are computed.
 
-
 @author: dipu
 """
 

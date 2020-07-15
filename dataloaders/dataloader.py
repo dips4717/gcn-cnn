@@ -53,7 +53,7 @@ def get_com2index():
             }
     return com2index
 
-#%%
+
 class RICO_ComponentDataset(Dataset):
     
     def default_loader(path):

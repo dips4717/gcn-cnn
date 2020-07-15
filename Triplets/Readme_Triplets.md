@@ -10,4 +10,4 @@
 	Run `python compute_pairwise_IoU` for several segment (batch of each 1000) of training UIs. 
 	* Once you compute iou values for all the segments, combine the output pickle files into one.
 	Run `python combine_segments.py` .
-	* Next, run `get_APN_triplet_dict.py` to get the final dictionary of the triplets. 
+	* Next, run `python get_APN_triplet_dict.py` to get the final dictionary of the triplets. 

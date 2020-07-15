@@ -55,7 +55,7 @@ def parse_opt():
                         help ='whether to pre-computed 25 Channel Images for faster dataloading/training') 
     parser.add_argument('--use_25_images', type=str2bool, default =True,  
                         help ='whether to use 3-channel Semanti UI or 25 Channel images for loss')
-    parser.add_argument('--apn_dict_path', type=str, default ='/home/dipu/codes/GraphEncoding-RICO/Triplet_exps/apn_dict_48K_pthres60.pkl', 
+    parser.add_argument('--apn_dict_path', type=str, default ='Triplets/apn_dict_48K_pthres60.pkl', 
                         help='path to the training triplets computed based on IoU')
     parser.add_argument('--xy_modified_feat', type=str2bool, default = False,
                         help='xy shifts normalized by width  & height or by the area')

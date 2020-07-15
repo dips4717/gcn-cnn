@@ -16,7 +16,7 @@ Note:
 Many of the images will be filtered out from anchors (30-40%)
 However, note that the other images in the train set can occur as negative sets...
 
-Change the pos threhold to 0.6
+Changed the pos threhold to >0.6.
 @author: dipu
 """
 

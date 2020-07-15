@@ -1,14 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Tue Jul 14 16:49:36 2020
-
-@author: dipu
-"""
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
 Created on Fri Feb 21 09:23:30 2020
 
 @author: dipu
