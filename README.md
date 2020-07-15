@@ -9,12 +9,12 @@
 ### RICO Datasets
 * Download RICO dataset from [rico](https://interactionmining.org/rico) (Optional)
 * We use semantic UI screenshots and annotations. Simplified annotation for semantic RICO UIs is given in `data/rico_box_info_list.pkl`
-* Dataset partition sets (train/gallery/query) used for all experiments are in `data/UI_data.p` and `UI_test_data.p`
+* Data partition sets (train/gallery/query) used for all experiments are in `data/UI_data.p` and `data/UI_test_data.p`
  
 
 ### GoogleUI Datasets
 * We release GoogleUI dataset. GoogleUI is a new dataset of 18.5K UX designs collected from web.
-* Dataset/annotations/descriptions can be obtained from [Google Drive] (https://drive.google.com/drive/folders/1LdhtDfiv48jSAbaLmL3rbrLBi4ZByd6p?usp=sharing)
+* Dataset/annotations/descriptions can be obtained from [Google Drive](https://drive.google.com/drive/folders/1LdhtDfiv48jSAbaLmL3rbrLBi4ZByd6p?usp=sharing)
 
 
 
@@ -36,8 +36,8 @@ python train.py --batch_size 10 --decoder_model 'strided' --dim 1024 \
 ```	
 
 * For faster dataloading and training, it is recommended to pre-compute the 25-Channel representations for all RICO UIs
-* To do so: run `python compute_25Chan_Imgs.py` 
-* This will save all 25 Channel represenations for all UIs into data/25ChanImages
+	* To do so: run `python compute_25Chan_Imgs.py` 
+	* This will save all 25 Channel represenations for all UIs into data/25ChanImages
 
 * To train GCN-CNN model using pre-computed 25-Channel representations
  
