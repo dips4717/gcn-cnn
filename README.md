@@ -6,13 +6,13 @@
 
 
 ## Datasets
-### RICO Datasets
+### RICO Dataset
 * Download RICO dataset from [rico](https://interactionmining.org/rico) (Optional)
 * We use semantic UI screenshots and annotations. Simplified annotation for semantic RICO UIs is given in `data/rico_box_info_list.pkl`
 * Data partition sets (train/gallery/query) used for all experiments are in `data/UI_data.p` and `data/UI_test_data.p`
  
 
-### GoogleUI Datasets
+### GoogleUI Dataset
 * We release GoogleUI dataset. GoogleUI is a new dataset of 18.5K UX designs collected from web.
 * Dataset/annotations/descriptions can be obtained from [Google Drive](https://drive.google.com/drive/folders/1LdhtDfiv48jSAbaLmL3rbrLBi4ZByd6p?usp=sharing)
 
