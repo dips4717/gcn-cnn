@@ -34,9 +34,9 @@ python train.py --batch_size 10 --decoder_model 'strided' --dim 1024 \
 --use_directed_graph True 
 ```	
 
-	* For faster dataloading and training, it is recommended to pre-compute the 25-Channel representations for all RICO UIs
-	* To do so: run `python compute_25Chan_Imgs.py` 
-	* This will save all 25 Channel represenations for all UIs into data/25ChanImages
+* For faster dataloading and training, it is recommended to pre-compute the 25-Channel representations for all RICO UIs
+* To do so: run `python compute_25Chan_Imgs.py` 
+* This will save all 25 Channel represenations for all UIs into data/25ChanImages
 
 * To train GCN-CNN model using pre-computed 25-Channel representations
  
@@ -65,7 +65,7 @@ python train_TRI.py --batch_size 10 --decoder_model 'strided' --dim 1024 \
 
 
 
-##Reference
+## Reference
 ```
 @inproceedings{gcncnn_eccv2020,
  title={Learning Structural Similarity of User Interface Layouts using Graph Networks},
@@ -74,6 +74,6 @@ python train_TRI.py --batch_size 10 --decoder_model 'strided' --dim 1024 \
  year={2020}}
 ```
 
-##Acknowlegdement
+## Acknowlegdement
 This repo re-uses part of the code from [ltguo19/VSUA-Captioning](https://github.com/ltguo19/VSUA-Captioning).
 	
