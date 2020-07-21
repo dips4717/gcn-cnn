@@ -361,7 +361,7 @@ class BlobFetcher():
                                             sampler=SubsetSampler(self.dataloader.split_ix[self.split][self.dataloader.iterators[self.split]:]),
                                             shuffle=False,
                                             pin_memory=True,
-                                            #num_workers= 1, #self.num_workers,#1, # 4 is usually enough
+                                            num_workers=self.num_workers,#1, # 4 is usually enough
                                             worker_init_fn=None,
                                             collate_fn=lambda x: x[0]))
 
