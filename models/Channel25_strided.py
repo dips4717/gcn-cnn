@@ -223,7 +223,7 @@ class GraphEncoder_25ChanStridedDecoder(nn.Module):
             rela_att_vec = torch.sum(rela_vecs, dim =1) / torch.sum(rela_masks, dim =1, keepdim = True)
             
         else:
-            raise Exception('readout method no implemented')
+            raise Exception('readout method not implemented')
 #       =================================================================  
        
         # Encoded vector

@@ -140,19 +140,19 @@ def main(opt):
         images = data['images'].cuda()
         sg_data = {key: torch.from_numpy(data['sg_data'][key]).cuda() for key in data['sg_data']}
         
-        #2. Forward model and compute loss
+        # Forward model and compute loss
 #        torch.cuda.synchronize()   # Waits for all kernels in all streams on a CUDA device to complete. 
         optimizer.zero_grad()
         _, out = model(sg_data)
-        print ('out size :', out.size() )
-        print('images size: ', images.size())
+        #print ('out size: ', out.size() )
+        #print('images size: ', images.size())
         if opt.decoder_model == 'strided': 
             images = F.interpolate(images, size= [239,111])
         elif opt.decoder_model == 'upsample':
             images = F.interpolate(images, size= [254,126])            
         loss = criterion(out, images) 
         
-        # 3. Update model
+        # Update model
         loss.backward()
         clip_gradient(optimizer, opt.grad_clip)
         optimizer.step()
@@ -265,7 +265,6 @@ def perform_tests(model, loader, boundingBoxes,  save_dir, ep):
         f.write('\n\ep: {}\n'.format(ep))
         f.write('Model name: {}\n'.format(save_dir))
         f.write('GAlleryOnly Flag: {}\n'.format(onlyGallery))     
-       
         f.write('overallMeanClassIou =  ' + str([ '{:.3f}'.format(x) for x in overallMeanClassIou]) + '\n')
         f.write('overallMeanAvgPixAcc =  ' + str([ '{:.3f}'.format(x) for x in overallMeanAvgPixAcc]) + '\n')
         

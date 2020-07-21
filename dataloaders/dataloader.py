@@ -137,8 +137,8 @@ class RICO_ComponentDataset(Dataset):
     
     def __getitem__(self, index):
 #        ix = index #self.split_ix[index]
-        
-        sg_data = self.get_graph_data(index)
+
+        sg_data = self.get_graph_data(index) 
                 
         image_id = self.info[index]['id']
         
@@ -159,10 +159,18 @@ class RICO_ComponentDataset(Dataset):
                 index)   
             
     def get_graph_data(self, index):
-        #self.opt.use_box_feats = True
+        """
+        sg_data is dictionary containing graph related data with following fields:
+            1. obj (list of int): object (UI component) class labels present in the UI /image. List of len N where N is number of objects in UI/image 
+            2. box (list of list): bounding box of each object UI components. List of len N, each element is bbox.
+            3. box_feats (float array of size NX5): geometric features of each box 
+            4. rela: a dict containing edges and corresponding relation features:
+                a) edges (array int64): edges indexes size N'x2, N'= total edges in the graph
+                b) feats (array float64): geometric relation features of size N'x8, corresponding to each edges.
+        """
+        
         image_id = self.info[index]['id']
-#        sg_use = np.load(self.sg_data_dir + image_id + '.npy', encoding='latin1', allow_pickle=True)[()]
-    
+            
         geometry_path = os.path.join(self.sg_geometry_dir, image_id + '.npy')
         rela = np.load(geometry_path, allow_pickle=True)[()] # dict contains keys of edges and feats
         
@@ -231,7 +239,7 @@ class RICO_ComponentDataset(Dataset):
         
 
         for i in range(batch_size):
-            # fetch image
+            # fetch grap data, image etc. 
             tmp_sg, tmp_img, ix, tmp_wrapped = self._prefetch_process[split].get()
             sg_batch.append(tmp_sg)
             images.append(tmp_img)     
@@ -252,14 +260,33 @@ class RICO_ComponentDataset(Dataset):
         
         data['bounds'] = {'it_pos_now': self.iterators[split], 'it_max': len(self.split_ix[split]), 'wrapped': wrapped}
         data['infos'] = infos
-
-        data['sg_data'] = self.batch_sg(sg_batch, max_box_len)
+        # images have the same dimensions thus can be directly stacked to form a batch
         data['images'] = torch.stack(images)
+           
+        # graph data may have variable number of objects and relations. Hence we process them to form a batch
+        data['sg_data'] = self.batch_sg(sg_batch, max_box_len)
+        
         
         return data
 
     def batch_sg(self, sg_batch, max_box_len):
-        "batching object, attribute, and relationship data"
+        """
+        sg_batch --> sg_data
+        Graph data may have variable number of objects and relations. Hence we process them to form a batch
+            + We create a batch with array with max number of object or relationships (edges) in the current batch
+            + We pad with zero values whenever they are less than max. 
+            + to store information of extra padding, two mask (binary) for obj and relation are created.
+            + these masks are later used in model to negate output of extra paddings. 
+        
+        
+        Args:
+            sg_batch: list of individual sg_data of samples
+            max_box_len: max len of box in the batch (coming from sample with largest number of object in current batch.)
+        
+        Returns:
+            sg_data: dict of batched items (box_feats, obj_labels, rela_feats etc.)
+        """
+
         obj_batch = [_['obj'] for _ in sg_batch]
         rela_batch = [_['rela'] for _ in sg_batch]
         box_batch = [_['box'] for _ in sg_batch]
@@ -290,7 +317,7 @@ class RICO_ComponentDataset(Dataset):
 
 
         # rela
-        max_rela_len = max([_['edges'].shape[0] for _ in rela_batch])
+        max_rela_len = max([_['edges'].shape[0] for _ in rela_batch]) 
         sg_data['rela_edges'] = np.zeros([len(rela_batch), max_rela_len, 2], dtype = 'int')
         
         if self.geometry_relation:
@@ -334,7 +361,7 @@ class BlobFetcher():
                                             sampler=SubsetSampler(self.dataloader.split_ix[self.split][self.dataloader.iterators[self.split]:]),
                                             shuffle=False,
                                             pin_memory=True,
-                                            num_workers= self.num_workers,#1, # 4 is usually enough
+                                            #num_workers= 1, #self.num_workers,#1, # 4 is usually enough
                                             worker_init_fn=None,
                                             collate_fn=lambda x: x[0]))
 
