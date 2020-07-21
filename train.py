@@ -15,15 +15,10 @@ import init_paths
 from BoundingBox import BoundingBox
 from BoundingBoxes import BoundingBoxes
 
-from dataloader import *
-from dataloader import RICO_ComponentDataset
-#from model_25_channel_out import GraphEncoderRasterDecoder
-#from models.model import GraphEncoderRasterDecoder
+from dataloaders.dataloader import *
+from dataloaders.dataloader import RICO_ComponentDataset
 import models
 
-#from dataloader import *
-#from dataloader import RICO_ComponentDataset
-#from model import GraphEncoderRasterDecoder
 import opts_dml
 import shutil
 import os
