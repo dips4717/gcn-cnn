@@ -60,11 +60,9 @@ class GNN(nn.Module):
         # rela
         # get node features for each triplet <subject, relation, object>
         s_idx = edges[:, 0].contiguous() # index of subject
-        o_idx = edges[:, 1].contiguous() # index of objec
-        #s_vecs = obj_vecs[s_idx]
-        #o_vecs = obj_vecs[o_idx]
-        s_vecs = obj_vecs[s_idx.type(torch.LongTensor)]  # For windows (fixed)
-        o_vecs = obj_vecs[o_idx.type(torch.LongTensor)]
+        o_idx = edges[:, 1].contiguous() # index of object
+        s_vecs = obj_vecs[s_idx]
+        o_vecs = obj_vecs[o_idx]
         
         t_vecs = torch.cat([s_vecs, rela_vecs, o_vecs], dim=1)
 

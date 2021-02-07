@@ -15,8 +15,8 @@ from scipy.spatial.distance import cdist
 import numpy as np
 import init_paths
 
-from dataloaders.dataloader_test import *
-from dataloaders.dataloader_test import RICO_ComponentDataset
+from dataloaders.dataloader_test_2 import *
+from dataloaders.dataloader_test_2 import RICO_ComponentDataset
 
 import models
 import opts_dml
@@ -53,9 +53,10 @@ def main():
     
 
     model = models.create(opt.decoder_model, opt)
-    resume = load_checkpoint(model_file)
+    #resume = load_checkpoint(model_file)
+    resume = torch.load(model_file, map_location=torch.device('cpu'))
     model.load_state_dict(resume['state_dict'])
-    model = model.cuda()
+    #model = model.cuda()
     model.eval()
     
     loader = RICO_ComponentDataset(opt, data_transform)     
@@ -94,7 +95,7 @@ def extract_features(model, loader, split='gallery'):
     while epoch_done == False:
         c+=1
         data = loader.get_batch(split)
-        sg_data = {key: torch.from_numpy(data['sg_data'][key]).cuda() for key in data['sg_data']}
+        sg_data = {key: torch.from_numpy(data['sg_data'][key]) for key in data['sg_data']}
         x_enc, x_dec = model(sg_data)
         x_enc = F.normalize(x_enc)
         outputs = x_enc.detach().cpu().numpy()
@@ -141,3 +142,4 @@ def getBoundingBoxes_from_info(info_file = 'data/rico_box_info.pkl'):
 #%%
 if __name__ == '__main__':
     main()
+
