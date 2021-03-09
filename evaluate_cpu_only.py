@@ -41,7 +41,6 @@ def main():
     
 
     boundingBoxes = getBoundingBoxes_from_info()
-    #model_file = 'trained_models/model_dec_strided_dim1024_TRI_ep25.pth'
     model_file = 'trained_models/model_dec_strided_dim1024_ep35.pth'
    
       
@@ -111,7 +110,7 @@ def extract_features(model, loader, split='gallery'):
         
     
 
-# prepare bounding boxes information for RICO datgsaet
+# prepare bounding boxes information for RICO dataset
 def getBoundingBoxes_from_info(info_file = 'data/rico_box_info.pkl'):
     allBoundingBoxes = BoundingBoxes()
     info = pickle.load(open(info_file, 'rb'))
@@ -133,11 +132,6 @@ def getBoundingBoxes_from_info(info_file = 'data/rico_box_info.pkl'):
     print('Collected {} bounding boxes from {} images'. format(allBoundingBoxes.count(), len(info) ))         
 #    testBoundingBoxes(allBoundingBoxes)
     return allBoundingBoxes
-
-  
-      
-
-
 
 #%%
 if __name__ == '__main__':

@@ -178,8 +178,8 @@ class GraphEncoder_25ChanStridedDecoder(nn.Module):
 #        rela_masks = rela_masks.unsqueeze(-1)
         
         #get the embeddings 
-        #obj_embed = self.obj_embed(obj_labels)
-        obj_embed = self.obj_embed(obj_labels.type(torch.LongTensor)) # Windows fix
+        obj_embed = self.obj_embed(obj_labels)
+        #obj_embed = self.obj_embed(obj_labels.type(torch.LongTensor)) # Windows fix
         rela_embed = rela_feats
         
         #project the embeddings
@@ -236,8 +236,7 @@ class GraphEncoder_25ChanStridedDecoder(nn.Module):
         x_rec = self._decoder(enc_vec)
         if self.opt.last_layer_sigmoid:
             x_rec = F.sigmoid(x_rec)
-        
-        return enc_vec, x_rec
+        return enc_vec, x_rec     
         
 #%%    
 class Attention(nn.Module):
@@ -246,20 +245,11 @@ class Attention(nn.Module):
         self.opt = opt
         self.rnn_size = opt.rnn_size
         self.att_hid_size = opt.rnn_size
-#        self.query_dim = self.rnn_size
-#        self.h2att = nn.Linear(self.query_dim, self.att_hid_size)
         self.alpha_net = nn.Linear(self.rnn_size, 1)
 
-#    def forward(self, h, att_feats, p_att_feats, att_masks=None):
     def forward(self, att_feats,  att_masks=None):
         # The p_att_feats here is already projected
         att_size = att_feats.numel() // att_feats.size(0) // att_feats.size(-1)
-#        att = p_att_feats.view(-1, att_size, self.att_hid_size)
-        
-#        att_h = self.h2att(h)                        # batch * att_hid_size
-#        att_h = att_h.unsqueeze(1).expand_as(att)            # batch * att_size * att_hid_size
-#        dot = att + att_h                                   # batch * att_size * att_hid_size
-        
         dot = att_feats
         dot = torch.tanh(dot)                                # batch * att_size * att_hid_size
         dot = dot.view(-1, self.att_hid_size)               # (batch * att_size) * att_hid_size

@@ -21,7 +21,7 @@ def parse_opt():
     parser = argparse.ArgumentParser()
     parser.add_argument('--id', type=str, default = 'test',
                         help = 'an id identifying this run/job used in cross-val and apppended when writing progress files')
-    parser.add_argument('--gpu_id', type=str, default = '3', help = 'GPU ID')
+    parser.add_argument('--gpu_id', type=str, default = '0', help = 'GPU ID')
     
     # DML Parameters
     parser.add_argument('--margin', type=float, default=0.2, # .0, #5.,
